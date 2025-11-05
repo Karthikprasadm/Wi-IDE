@@ -1,3 +1,34 @@
+<!-- Local quickstart for this workspace -->
+<details>
+<summary><strong>Local quickstart (how to run this workspace)</strong></summary>
+
+For complete instructions, see `how_to_run.md`.
+
+Quick commands (Windows PowerShell):
+
+1. Start Docker and serve the web app:
+
+   ```powershell
+   .\scripts\run-with-docker.ps1
+   ```
+
+2. Web only (no Docker):
+
+   ```powershell
+   npx -y @vscode/test-web --host 127.0.0.1 --port 8082 --browserType none "D:\\Wi-IDE"
+   ```
+
+3. Desktop app (Electron):
+
+   - Install VS 2022 Build Tools with MSVC v143 + Spectre libs + Windows SDK
+   - Then:
+
+   ```powershell
+   .\scripts\code.bat
+   ```
+
+</details>
+
 # Visual Studio Code - Open Source ("Code - OSS")
 [![Feature Requests](https://img.shields.io/github/issues/microsoft/vscode/feature-request.svg)](https://github.com/microsoft/vscode/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
 [![Bugs](https://img.shields.io/github/issues/microsoft/vscode/bug.svg)](https://github.com/microsoft/vscode/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
