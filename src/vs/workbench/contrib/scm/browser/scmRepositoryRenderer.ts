@@ -100,7 +100,7 @@ export class RepositoryRenderer implements ICompressibleTreeRenderer<ISCMReposit
 		const label = new IconLabel(provider, { supportIcons: false });
 
 		const actions = append(provider, $('.actions'));
-		const toolBar = new WorkbenchToolBar(actions, { actionViewItemProvider: this.actionViewItemProvider, resetMenu: this.toolbarMenuId, responsive: true }, this.menuService, this.contextKeyService, this.contextMenuService, this.keybindingService, this.commandService, this.telemetryService);
+		const toolBar = new WorkbenchToolBar(actions, { actionViewItemProvider: this.actionViewItemProvider, resetMenu: this.toolbarMenuId, responsiveBehavior: { enabled: true, minItems: 2 } }, this.menuService, this.contextKeyService, this.contextMenuService, this.keybindingService, this.commandService, this.telemetryService);
 		const countContainer = append(provider, $('.count'));
 		const count = new CountBadge(countContainer, {}, defaultCountBadgeStyles);
 		const visibilityDisposable = toolBar.onDidChangeDropdownVisibility(e => provider.classList.toggle('active', e));
@@ -153,11 +153,23 @@ export class RepositoryRenderer implements ICompressibleTreeRenderer<ISCMReposit
 			}
 		}
 
+		let label: string;
+		if (this.scmViewService.explorerEnabledConfig.get() === false) {
+			label = repository.provider.name;
+		} else {
+			const parentRepository = this.scmViewService.repositories
+				.find(r => r.provider.id === repository.provider.parentId);
+
+			label = parentRepository
+				? `${parentRepository.provider.name} / ${repository.provider.name}`
+				: repository.provider.name;
+		}
+
 		const title = repository.provider.rootUri
-			? `${repository.provider.label}: ${repository.provider.rootUri.fsPath}`
+			? `${repository.provider.label}: ${this.labelService.getUriLabel(repository.provider.rootUri)}`
 			: repository.provider.label;
 
-		templateData.label.setLabel(repository.provider.name, description, { title });
+		templateData.label.setLabel(label, description, { title });
 
 		let statusPrimaryActions: IAction[] = [];
 		let menuPrimaryActions: IAction[] = [];
@@ -190,7 +202,7 @@ export class RepositoryRenderer implements ICompressibleTreeRenderer<ISCMReposit
 				menuPrimaryActions = primary;
 				menuSecondaryActions = secondary;
 				updateToolbar();
-			}));
+			}, 'inline'));
 		}));
 
 		templateData.toolBar.context = repository.provider;
